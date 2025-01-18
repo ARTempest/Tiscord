@@ -21,7 +21,7 @@ OBJECTS = $(addprefix $(OBJECT_PATH)/, $(patsubst $(SOURCE_PATH)/%, %, $(SOURCES
 CPP_COMPILER = clang++
 CPP_VERSION = -std=c++20
 
-CPP_INCLUDE_PATHS =
+CPP_INCLUDE_PATHS = -Iinclude
 CPP_LIBRARY_PATHS =
 CPP_LIBRARIES =
 CPP_OPTIMIZATION = -Og
@@ -49,17 +49,17 @@ build: $(BIN_PATH)
 
 
 .PHONY:
-run:
+run: $(BIN_PATH)
 	@ $(BIN_PATH)
 
 
 $(BIN_PATH): $(OBJECTS)
-	$(CPP_COMPILER) $(OBJECTS) -o $(BIN_PATH) $(CPP_LINKER_OPTIONS)
+	@ $(CPP_COMPILER) $(OBJECTS) -o $(BIN_PATH) $(CPP_LINKER_OPTIONS)
 
 
 $(OBJECTS): $(OBJECT_PATH)/%.o: $(SOURCE_PATH)/%.cpp
-	mkdir $(dir $@) -p
-	$(CPP_COMPILER) -c $< -o $@ $(CPP_COMPILER_OPTIONS)
+	@ mkdir $(dir $@) -p
+	@ $(CPP_COMPILER) -c $< -o $@ $(CPP_COMPILER_OPTIONS)
 
 
 .PHONY:

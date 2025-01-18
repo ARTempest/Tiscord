@@ -8,6 +8,7 @@ A version of discord but this time in terminal.
 
 - Compiler clang++;
 - GNU Make;
+- C++ [HTTPRequest](https://github.com/elnormous/HTTPRequest)
 
 ## Process
 
