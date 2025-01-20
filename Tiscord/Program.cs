@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+
 using Tiscord.API;
 using Tiscord.Terminal;
 
@@ -43,8 +44,11 @@ class TiscordApp
         Console.WriteLine($"OAuth2 code: {authCode}.");
         Console.WriteLine("Requesting access token.");
 
-        string accessToken = DiscordOAuth.GetBearerToken(authCode, clientData);
-
+        string accessToken = DiscordOAuth.GetBearerToken(authCode, clientData)["access_token"]!.ToString();
         Console.WriteLine($"Access token: {accessToken}.");
+
+        DiscordAPIHandler discord = new(accessToken);
+
+        // does nothing bruh
     }
 }

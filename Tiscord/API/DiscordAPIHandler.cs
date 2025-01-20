@@ -14,9 +14,7 @@ public class DiscordAPIHandler : HttpClient
 
     public DiscordAPIHandler(string accessToken)
     {
-        BaseAddress = new(Endpoint);
         DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
-        DefaultRequestHeaders.Add("Content-Type", "application/json");
 
         AccessToken = accessToken;
     }

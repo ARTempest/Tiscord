@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Diagnostics;
 
+using Newtonsoft.Json.Linq;
+
 
 namespace Tiscord.API;
 
@@ -26,7 +28,7 @@ public static class DiscordOAuth
     /// <param name="authCode">The authentication code.</param>
     /// <param name="clientData">Client authentication data.</param>
     /// <returns>The access bearer token string.</returns>
-    public static string GetBearerToken(string authCode, ClientId clientData)
+    public static JObject GetBearerToken(string authCode, ClientId clientData)
     {
         HttpClient client = new();
         HttpRequestMessage request = new(HttpMethod.Post, TokenEndpoint);
@@ -41,7 +43,7 @@ public static class DiscordOAuth
 
         HttpResponseMessage response = client.Send(request);
 
-        return response.Content.ReadAsStringAsync().Result;
+        return JObject.Parse(response.Content.ReadAsStringAsync().Result);
     }
 
 
