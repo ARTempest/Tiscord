@@ -1,27 +1,23 @@
 using System.Net.Http;
 
 
-namespace Tiscord.Server;
+namespace Tiscord.API;
 
 
 public class DiscordAPIHandler : HttpClient
 {
-    public const string Endpoint = "https://discord.com/api/v10/";
+    public const string Endpoint = "https://discord.com/api/v10";
 
 
-    public HttpClient Client { get; }
-
-    public string ClientId { get; }
-    public string ClientSecret { get; }
-    public string AuthCode { get; }
+    public string AccessToken { get; }
 
 
-    public DiscordAPIHandler(string clientId, string clientSecret, string authCode)
+    public DiscordAPIHandler(string accessToken)
     {
-        Client = new();
+        BaseAddress = new(Endpoint);
+        DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+        DefaultRequestHeaders.Add("Content-Type", "application/json");
 
-        ClientId = clientId;
-        ClientSecret = clientSecret;
-        AuthCode = authCode;
+        AccessToken = accessToken;
     }
 }

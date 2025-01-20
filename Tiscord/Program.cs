@@ -1,6 +1,7 @@
 ﻿using System;
-
-using Tiscord.Server;
+using System.IO;
+using Tiscord.API;
+using Tiscord.Terminal;
 
 
 namespace Tiscord;
@@ -10,22 +11,40 @@ class TiscordApp
 {
     public static void Main()
     {
-        Console.WriteLine("Tiscord started, welcome!");
+        Config.InitConfigPath();
 
-        Console.WriteLine("Asking for Discord permission in the browser, please accept.");
-        string? authCode = OAuthHandler.RequestAuthCode();
+        ClientId clientData;
+
+        try
+        {
+            Console.WriteLine("Loading client data from configuration path.");
+            clientData = Config.GetClientIdFromConfigPath();
+        }
+        catch (FileNotFoundException exception)
+        {
+            Console.WriteLine("Couldn't load client data from configuration path.");
+            Console.WriteLine($"Configuration can be find at '{Config.ConfigPath}'.");
+
+            clientData = Input.ReadClientIdFromTerminal();
+
+            Config.LoadClientIdToConfigPath(clientData);
+        }
+
+        Console.WriteLine("Asking for authentication.");
+
+        string? authCode = DiscordOAuth.GetAuthCode();
 
         if (authCode is null)
         {
-            Console.WriteLine("OAuth didn't work as expected, closing application...");
+            Console.WriteLine("OAuth2 didn't work as expected. Closing application.");
             return;
         }
 
-        const string ClientId = "1330614744649957457";
-        const string ClientSecret = "vM3eWsw3Yy-tG6n3pzXOdRyjmSNp8fhM";
+        Console.WriteLine($"OAuth2 code: {authCode}.");
+        Console.WriteLine("Requesting access token.");
 
-        DiscordAPIHandler discord = new(ClientId, ClientSecret, authCode);
+        string accessToken = DiscordOAuth.GetBearerToken(authCode, clientData);
 
-
+        Console.WriteLine($"Access token: {accessToken}.");
     }
 }
